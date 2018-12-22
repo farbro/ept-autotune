@@ -1,5 +1,5 @@
 TEMPLATE = lib
-CONFIG += dll c++11 noqt
+CONFIG += dll c++14 noqt
 CONFIG -= qt
 DESTDIR = $$shadowed($$PWD)
 

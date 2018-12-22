@@ -4,7 +4,7 @@ defineReplace(declareStaticLibrary) {
     libname = $$1
 
     TEMPLATE = lib
-    CONFIG += staticlib c++11 noqt
+    CONFIG += staticlib c++14 noqt
     CONFIG -= qt
     DESTDIR = $$EPT_THIRDPARTY_OUT_DIR
 
@@ -40,7 +40,7 @@ defineReplace(declareSharedLibrary) {
 
     }
 
-    CONFIG += c++11 noqt
+    CONFIG += c++14 noqt
     CONFIG -= qt
 
     DESTDIR = $$EPT_THIRDPARTY_OUT_DIR

@@ -32,7 +32,7 @@ public:
     virtual bool queryBoolAttribute(const std::string &id) = 0;
 
     void queryBoolAttributeRef(const std::string &id, bool &value) {
-        value = queryBoolAttribute(id, static_cast<const bool>(value));
+        value = queryBoolAttribute(id, static_cast<const bool&>(value));
     }
 
     bool queryBoolAttribute(const std::string &id, bool defaultValue) {
@@ -45,7 +45,7 @@ public:
     virtual int queryIntAttribute(const std::string &id) = 0;
 
     void queryIntAttributeRef(const std::string &id, int &value) {
-        value = queryIntAttribute(id, static_cast<const int>(value));
+        value = queryIntAttribute(id, static_cast<const int&>(value));
     }
 
     int queryIntAttribute(const std::string &id, int defaultValue) {
@@ -58,7 +58,7 @@ public:
     virtual double queryRealAttribute(const std::string &id) = 0;
 
     void queryRealAttributeRef(const std::string &id, double &value) {
-        value = queryRealAttribute(id, static_cast<const double>(value));
+        value = queryRealAttribute(id, static_cast<const double&>(value));
     }
 
     virtual double queryRealAttribute(const std::string &id, double defaultValue) {

@@ -8,6 +8,10 @@
 *.db
 *.DS_Store
 
+# generated files
+config.tests/*/Makefile
+.qmake.stash
+
 # user files
 *.user
 *.user.*

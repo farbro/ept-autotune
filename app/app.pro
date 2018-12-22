@@ -14,7 +14,7 @@ android:QT  += androidextras
 # Target and config
 TARGET = entropypianotuner
 TEMPLATE = app
-CONFIG += c++11
+CONFIG += c++14
 
 include(../entropypianotuner_config.pri)
 include(../entropypianotuner_func.pri)

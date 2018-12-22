@@ -15,7 +15,7 @@ QT += core
 contains(EPT_CONFIG, static_core):CONFIG += staticlib
 else:CONFIG += dll
 
-CONFIG += c++11
+CONFIG += c++14
 
 # add this define to set dllimport/dllexport for msvc
 DEFINES += EPT_BUILD_CORE

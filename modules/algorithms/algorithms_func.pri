@@ -16,7 +16,7 @@ defineReplace(declareAlgorithm) {
     }
 
     TARGET = $$algorithmName
-    CONFIG += c++11
+    CONFIG += c++14
 
     DESTDIR = $$EPT_ALGORITHMS_OUT_DIR
 
