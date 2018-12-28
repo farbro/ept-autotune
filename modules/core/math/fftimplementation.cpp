@@ -162,8 +162,8 @@ void FFT_Implementation::updatePlan (const FFTRealVector &in,
 
         // allocate new vectors and create a new plan
         mNRC   = in.size();
-        mRvec1 = (double *) malloc(mNRC*sizeof(double));
-        mCvec2 = (fftw_complex*) fftw_malloc((mNRC/2+1)*sizeof(fftw_complex));
+        mRvec1 = static_cast<double *>(malloc(mNRC*sizeof(double)));
+        mCvec2 = static_cast<fftw_complex*>(fftw_malloc((mNRC/2+1)*sizeof(fftw_complex)));
         EptAssert(mRvec1, "May not be nullptr");
         EptAssert(mCvec2, "May not be nullptr");
         mPlanRC = fftw_plan_dft_r2c_1d (static_cast<int>(mNRC), mRvec1, mCvec2, flags);
@@ -205,8 +205,8 @@ void FFT_Implementation::updatePlan (const FFTComplexVector &in,
 
         // allocate new vectors and create a new plan
         mNCR   = 2*in.size()-2;
-        mCvec1 = (fftw_complex*) fftw_malloc((mNCR/2+1)*sizeof(fftw_complex));
-        mRvec2 = (double *) malloc(mNCR*sizeof(double));
+        mCvec1 = static_cast<fftw_complex*>(fftw_malloc((mNCR/2+1)*sizeof(fftw_complex)));
+        mRvec2 = static_cast<double *>(malloc(mNCR*sizeof(double)));
         EptAssert(mCvec1, "May not be nullptr");
         EptAssert(mRvec2, "May not be nullptr");
         mPlanCR = fftw_plan_dft_c2r_1d (static_cast<int>(mNCR), mCvec1, mRvec2, flags);
@@ -244,7 +244,7 @@ void FFT_Implementation::calculateFFT  (const FFTRealVector &in, FFTComplexVecto
     try {
         std::memcpy(mRvec1,in.data(),mNRC*sizeof(double));
         fftw_execute(mPlanRC);
-        std::memcpy(out.data(),mCvec2,(mNRC/2+1)*sizeof(fftw_complex));
+        std::memcpy(out.data(), static_cast<const void*>(mCvec2),(mNRC/2+1)*sizeof(fftw_complex));
     }
     catch (...) LogE("fftw_execute throwed an exception");
 }
