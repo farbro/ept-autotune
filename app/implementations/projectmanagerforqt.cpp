@@ -88,12 +88,11 @@ ProjectManagerForQt::FileDialogResult ProjectManagerForQt::getSavePath(int fileT
     return SimpleFileDialog::getSaveFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).toStdWString();
 #else
     QString path(getCurrentPath());
-    QDir().mkdir(path);
     QString defaultSuffix;
     if (fileType & piano::FT_EPT) {defaultSuffix = "ept";}
     else if (fileType & piano::FT_CSV) {defaultSuffix = "csv";}
     // static method call is required to get native file dialog
-    QString file = QFileDialog::getSaveFileName(mMainWindow, MainWindow::tr("Save"), path, getFileFilters(fileType, true), 0);
+    QString file = QFileDialog::getSaveFileName(mMainWindow, MainWindow::tr("Save"), path, getFileFilters(fileType, true), nullptr);
     if (file.isEmpty()) {
         // canceled
         return std::wstring();
@@ -115,9 +114,8 @@ ProjectManagerForQt::FileDialogResult ProjectManagerForQt::getOpenPath(int fileT
     return SimpleFileDialog::getOpenFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).toStdWString();
 #else
     QString path(getCurrentPath());
-    QDir().mkdir(path);
     // static method call is required to get native file dialog
-    QString file = QFileDialog::getOpenFileName(mMainWindow, MainWindow::tr("Open"), path, getFileFilters(fileType, true), 0);
+    QString file = QFileDialog::getOpenFileName(mMainWindow, MainWindow::tr("Open"), path, getFileFilters(fileType, true), nullptr);
     if (file.isEmpty()) {
         // canceled
         return std::wstring();
@@ -210,6 +208,7 @@ bool ProjectManagerForQt::isVaildFileEndig(QString filename, int fileTypes) cons
 
 void ProjectManagerForQt::writePianoFile(const FileDialogResult &fileInfo, const Piano &piano) {
     QFile file(QString::fromStdWString(fileInfo.path));
+    QDir().mkdir(QFileInfo(file).absoluteDir().absolutePath());
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         EPT_EXCEPT(EptException::ERR_CANNOT_WRITE_TO_FILE, QString("Could not open file '%1'").arg(QString::fromStdWString(fileInfo.path)).toStdString().c_str());
     }
