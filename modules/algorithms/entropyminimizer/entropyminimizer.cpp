@@ -563,7 +563,7 @@ void EntropyMinimizer::minimizeEntropy ()
     uint64_t updatesSinceLastChange = 0;
 
     // helper function for accepting an update and handling the progress bar
-    auto acceptUpdate = [&H,&attemptsCounter,&updatesSinceLastChange,this] (int keynumber, double Hnew)
+    auto acceptUpdate = [&H,&updatesSinceLastChange,this] (int keynumber, double Hnew)
     {
         // update entropy and tuning curve
         H = Hnew;

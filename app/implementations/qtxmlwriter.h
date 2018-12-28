@@ -9,6 +9,7 @@ class QtXmlWriter : public XmlWriterInterface
 {
 public:
     QtXmlWriter();
+    virtual ~QtXmlWriter();
 
     virtual bool open() override final;
     virtual std::wstring close() override final;

@@ -41,6 +41,9 @@ win32:contains(EPT_CONFIG, shared_core) {
     DEFINES += TP3LOG_DLL
 }
 
+# qwt
+ios: EPT_CONFIG += static_qwt
+
 #--------------------------------------------------
 # global settings
 

@@ -91,7 +91,7 @@ std::pair<FFTAnalyzerErrorTypes, std::shared_ptr<Key> > FFTAnalyzer::analyse (
     // for the frequency estimation. This function computes how many
     // octaves we intend to shift:
 
-    auto octaves = [this] (int keynumber, int keyNumberOfA)
+    auto octaves = [] (int keynumber, int keyNumberOfA)
     {
         int distance = keyNumberOfA - keynumber;
         if (distance > 36) return 2;
@@ -296,7 +296,7 @@ FrequencyDetectionResult FFTAnalyzer::detectFrequencyOfKnownKey (
 void FFTAnalyzer::constructLogBinnedSpectrum(FFTDataPointer fftData, SpectrumType &spectrum)
 {
     const double b = 2.0 * fftData->fft.size() / fftData->samplingRate;
-    std::function<double(double)> mtoq = [this,b] (double m)
+    std::function<double(double)> mtoq = [b] (double m)
              { return b * Key::IndexToFrequency(m); };
     MathTools::coarseGrainSpectrum (fftData->fft,spectrum,mtoq,0.25);
     MathTools::normalize(spectrum);

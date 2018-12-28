@@ -23,6 +23,9 @@
 template<>
 std::unique_ptr<IOsPlatformTools> PlatformToolsImplementation<IOsPlatformTools>::mSingleton(new IOsPlatformTools());
 
+IOsPlatformTools::~IOsPlatformTools() {
+}
+
 void IOsPlatformTools::init() {
     iosInit();
 }

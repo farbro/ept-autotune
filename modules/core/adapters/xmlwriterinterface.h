@@ -40,6 +40,7 @@ protected:
     XmlWriterFactoryBase(const std::string &mId);
 
 public:
+    virtual ~XmlWriterFactoryBase() {}
     virtual XmlWriterInterfacePtr createInstance() = 0;
 
     const std::string &getId() const {return mId;}

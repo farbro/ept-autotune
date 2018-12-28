@@ -23,6 +23,9 @@
 #include "implementations/platformtools.h"
 
 class IOsPlatformTools : PlatformToolsImplementation<IOsPlatformTools> {
+public:
+    virtual ~IOsPlatformTools();
+
 private:
     virtual void init() override;
     virtual void disableScreensaver() override;

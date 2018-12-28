@@ -236,7 +236,7 @@ void AuditoryPreprocessing::cleanSpectrum (Key &key)
 
     auto wave = [f,B,this] (int m)
         { return cos(MathTools::PI*getInharmonicPartialIndex(mtof(m),f,B)); };
-    auto envelope = [wave,f,this] (int m)
+    auto envelope = [wave,f] (int m)
         { return  pow(fabs(wave(m)),200.0/pow(mtof(m)/f,1.5)); };
 
     for (int m=0; m<M; m++) spectrum[m] *= envelope(m);

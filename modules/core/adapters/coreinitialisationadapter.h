@@ -52,9 +52,10 @@ private:
 
 public:
     CoreInitialisationAdapter();
+    virtual ~CoreInitialisationAdapter() {}
 
-    virtual void create()=0;       ///< Create the initialization dialog box
-    virtual void destroy()=0;      ///< Destroy the initialization dialog box
+    virtual void create() = 0;       ///< Create the initialization dialog box
+    virtual void destroy() = 0;      ///< Destroy the initialization dialog box
 
     ///////////////////////////////////////////////////////////////////////////////
     /// \brief Show the current progress as a progress bar

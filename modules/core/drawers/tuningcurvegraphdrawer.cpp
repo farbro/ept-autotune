@@ -180,7 +180,7 @@ void TuningCurveGraphDrawer::manuallyEditTuningCurveByClick (double relX, double
 {
     if (relX < 0 or relX > 1 or relY < 0 or relY > 1) return; // out of range
 
-    int keynumber = (int)(mNumberOfKeys * relX);
+    int keynumber = static_cast<int>(mNumberOfKeys * relX);
     if (keynumber < 0 or keynumber >= mNumberOfKeys) return;
 
     if (keynumber == mKeyNumberOfA4)
@@ -282,7 +282,7 @@ void TuningCurveGraphDrawer::drawMarkers(int8_t keynumber)
 void TuningCurveGraphDrawer::draw()
 {
     drawGrid();
-    for (int i = 0; i < mNumberOfKeys; i++) drawMarkers(i);
+    for (int8_t i = 0; i < static_cast<int8_t>(mNumberOfKeys); i++) drawMarkers(i);
 }
 
 
@@ -310,7 +310,7 @@ double TuningCurveGraphDrawer::getMarkerPosition(int keyindex, RoleType role)
     const Key &key = mPiano->getKey(keyindex);
 
     // lambda function converting a frequency ratio to cents
-    auto ratioToCents = [this](double ratio)
+    auto ratioToCents = [](double ratio)
                         { return 1200*log(ratio)/MathTools::LOG2; };
 
     if (role & ROLE_INHARMONICITY)
@@ -421,7 +421,7 @@ void TuningCurveGraphDrawer::updateMarkerPosition(int keyindex, RoleType role)
     else // if the marker does not exist
     {
         // compute x-coordinate (y-coordinate already exists)
-        double x  = (double)(keyindex) / mNumberOfKeys;
+        double x  = static_cast<double>(keyindex) / mNumberOfKeys;
         double dx = 1.0 / mNumberOfKeys;
         if (y > 0 && y < 1)
         {

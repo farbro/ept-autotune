@@ -12,6 +12,9 @@ QtXmlWriter::QtXmlWriter() :
     mWriter.setAutoFormatting(true);
 }
 
+QtXmlWriter::~QtXmlWriter() {
+}
+
 bool QtXmlWriter::open() {
     return mWriter.hasError() == false;
 }

@@ -8,6 +8,7 @@
 class EPT_EXTERN XmlReaderInterface
 {
 public:
+    virtual ~XmlReaderInterface();
     virtual bool openFile(const std::wstring &path) = 0;
     virtual bool openString(const std::wstring &contents) = 0;
     virtual void clear() = 0;
@@ -108,6 +109,7 @@ protected:
     XmlReaderFactoryBase(const std::string &mId);
 
 public:
+    virtual ~XmlReaderFactoryBase();
     virtual XmlReaderInterfacePtr createInstance() = 0;
 
     const std::string &getId() const {return mId;}

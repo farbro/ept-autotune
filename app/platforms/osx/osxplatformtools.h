@@ -29,6 +29,8 @@
 #include "implementations/platformtools.h"
 
 class OsXPlatformTools : public PlatformToolsImplementation<OsXPlatformTools> {
+public:
+    virtual ~OsXPlatformTools() {}
 private:
     virtual void disableScreensaver() override;
     virtual void enableScreensaver() override;

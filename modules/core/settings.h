@@ -39,8 +39,8 @@
 class EPT_EXTERN Settings
 {
 public:
-    Settings();     ///< Constructor
-    ~Settings(){}   ///< Empty destructor
+    Settings();                 ///< Constructor
+    virtual ~Settings() {}      ///< Empty destructor
 
     static Settings &getSingleton();
 
