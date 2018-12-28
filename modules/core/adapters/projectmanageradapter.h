@@ -43,6 +43,7 @@ class Piano;
 class EPT_EXTERN FileChangesCallback
 {
 public:
+    virtual ~FileChangesCallback();
     virtual void changesInFileUpdated(bool changes) = 0;
 };
 
@@ -67,6 +68,10 @@ public:
         R_ACCEPTED,
     };
 
+    enum FileSaveType {
+        FST_SAVE,
+        FST_EXPORT,
+    };
 
 
     struct EPT_EXTERN FileDialogResult
@@ -81,8 +86,8 @@ public:
     };
 
 public:
-    ProjectManagerAdapter();                    ///< Constructor
-    virtual ~ProjectManagerAdapter() {}         ///< Empty destructor
+    ProjectManagerAdapter();                        ///< Constructor
+    virtual ~ProjectManagerAdapter() override {}    ///< Empty destructor
 
     void init(Core *core);                      // Initialize the adapter
     void setCallback(FileChangesCallback *cb);  // Set callback function
@@ -104,7 +109,7 @@ public:
 
 
     // open or save file
-    Results saveFile(const FileDialogResult &fileInfo);
+    Results saveFile(const FileDialogResult &fileInfo, FileSaveType fst);
     Results openFile(const FileDialogResult &fileInfo, bool cached = false);
 
 protected:

@@ -36,6 +36,10 @@ using piano::FT_EPT;
 using piano::FT_NONE;
 using piano::parseFileType;
 
+
+FileChangesCallback::~FileChangesCallback() {
+}
+
 ProjectManagerAdapter::FileDialogResult::FileDialogResult(const std::wstring p) :
     path(p),
     fileType(piano::parseTypeOfFilePath(p)) {
@@ -160,7 +164,7 @@ ProjectManagerAdapter::Results ProjectManagerAdapter::onSaveFile()
     }
 
     // save at current location
-    saveFile(FileDialogResult(mCurrentFilePath, FT_EPT));
+    saveFile(FileDialogResult(mCurrentFilePath, FT_EPT), FST_SAVE);
     return R_ACCEPTED;
 }
 
@@ -185,7 +189,7 @@ ProjectManagerAdapter::Results ProjectManagerAdapter::onSaveFileAs() {
     }
 
     // file was stored    
-    saveFile(FileDialogResult(r.path, r.fileType));
+    saveFile(FileDialogResult(r.path, r.fileType), FST_SAVE);
     return R_ACCEPTED;
 }
 
@@ -323,7 +327,7 @@ ProjectManagerAdapter::Results ProjectManagerAdapter::onExport()
     }
 
     // file was stored
-    saveFile(FileDialogResult(r.path, r.fileType));
+    saveFile(FileDialogResult(r.path, r.fileType), FST_EXPORT);
     return R_ACCEPTED;
 }
 
@@ -418,6 +422,7 @@ void ProjectManagerAdapter::setChangesInFile(bool b)
 /// \brief ProjectManagerAdapter::saveFile
 /// \param path : Path where the file shall be stored
 /// \param type : Type of the file
+/// \param fst : If FST_SAVE this will mark the file as saved and adjust the current file path
 ///
 /// This function calls the function mPianoFile.write in order to write
 /// the entire piano. Possible exceptions are caught and handled. If the
@@ -425,7 +430,7 @@ void ProjectManagerAdapter::setChangesInFile(bool b)
 /// \return Enum of type ProjectManagerAdapter::Results
 ///////////////////////////////////////////////////////////////////////////////
 
-ProjectManagerAdapter::Results ProjectManagerAdapter::saveFile(const FileDialogResult &fileInfo)
+ProjectManagerAdapter::Results ProjectManagerAdapter::saveFile(const FileDialogResult &fileInfo, FileSaveType fst)
 {
     EptAssert(fileInfo.isValid(), "File type not valid.");
 
@@ -435,12 +440,15 @@ ProjectManagerAdapter::Results ProjectManagerAdapter::saveFile(const FileDialogR
         writePianoFile(fileInfo, mCore->getPianoManager()->getPiano());
 
         LogI("File saved!");
-        mCurrentFilePath = fileInfo.path;    // remember current path
-        setChangesInFile(false);             // after saving the status is that there are no changes
 
-        // Tell the other modules that the file has been saved
-        MessageHandler::send<MessageProjectFile>(MessageProjectFile::FILE_SAVED,
-                                                 mCore->getPianoManager()->getPiano());
+        if (fst == FST_SAVE) {
+            mCurrentFilePath = fileInfo.path;    // remember current path
+            setChangesInFile(false);             // after saving the status is that there are no changes
+
+            // Tell the other modules that the file has been saved
+            MessageHandler::send<MessageProjectFile>(MessageProjectFile::FILE_SAVED,
+                                                     mCore->getPianoManager()->getPiano());
+        }
     }
     catch (const EptException &e)
     {
