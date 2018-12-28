@@ -84,11 +84,13 @@ QSize RecordingQualityBar::sizeHint() const {
 /// \param v : Quality between 0 and 1
 ///////////////////////////////////////////////////////////////////////////////
 
-void RecordingQualityBar::updateValue(float v) {
-    if (value() == v * 10000) {
+void RecordingQualityBar::updateValue(double v) {
+    const int iv = static_cast<int>(v * 10000);
+    if (value() == iv) {
         return;
     }
-    setValue(v * 10000);
+    setValue(iv);
+    setToolTip(QString::number(v, 'f', 3));
     QPalette p = this->palette();
 
     int red = static_cast<int>(255*std::pow(1-v,0.3));
