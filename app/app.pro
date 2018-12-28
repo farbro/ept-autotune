@@ -134,8 +134,8 @@ ios {
     QMAKE_BUNDLE_DATA += launch_screen
 
     # Set "Devices" (1=iPhone, 2=iPad, 1,2=Universal)
-    isEmpty(QMAKE_IOS_TARGETED_DEVICE_FAMILY) {
-        QMAKE_IOS_TARGETED_DEVICE_FAMILY = 2
+    isEmpty(QMAKE_APPLE_TARGETED_DEVICE_FAMILY) {
+        QMAKE_APPLE_TARGETED_DEVICE_FAMILY = 1,2
     }
 }
 
