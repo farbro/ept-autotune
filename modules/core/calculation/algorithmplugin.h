@@ -8,9 +8,6 @@
 #include "core/calculation/algorithmfactory.h"
 #include "core/messages/messagelistener.h"
 
-
-class AlgorithmFactoryBase;
-
 // Define the API version
 // This value shall be incremented whenever there are API breaking changes.
 #define ALGORITHM_PLUGIN_API_VERSION 1
@@ -24,7 +21,8 @@ class AlgorithmFactoryBase;
 #define ALGORITHM_STRINGIFY(x) #x
 
 // Define a type for the static function pointer.
-EPT_EXTERN typedef AlgorithmFactoryBase* (*GetAlgorithmFactoryFunc)();
+class AlgorithmFactoryBase;
+typedef AlgorithmFactoryBase* (*GetAlgorithmFactoryFunc)();
 
 // Algorithm plugin details structure that is exposed to the application
 struct AlgorithmPluginDetails {

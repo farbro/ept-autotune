@@ -29,7 +29,7 @@
 /// \brief Enumeration of possible errors during the fft analysis
 ///////////////////////////////////////////////////////////////////////////////
 
-enum class EPT_EXTERN FFTAnalyzerErrorTypes
+enum class FFTAnalyzerErrorTypes
 {
     ERR_NONE,                           ///< No error occured
     ERR_FREQUENCY_OUT_OF_BOUNDS,        ///< The recorded frequency is out of the piano range

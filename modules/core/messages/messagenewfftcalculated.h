@@ -56,7 +56,7 @@ public:
     MessageNewFFTCalculated(FFTMessageTypes type,
                             FFTDataPointer fftdata,
                             std::shared_ptr<FFTPolygon> polygon);
-    virtual ~MessageNewFFTCalculated() {}
+    virtual ~MessageNewFFTCalculated();
 
     FFTDataPointer getData() const { return mFFTData; }
     std::shared_ptr<FFTPolygon> getPolygon() const { return mPolygon; }

@@ -36,3 +36,5 @@ MessageNewFFTCalculated::MessageNewFFTCalculated(
     mErrorType(FFTAnalyzerErrorTypes::ERR_NONE)
 {}
 
+MessageNewFFTCalculated::~MessageNewFFTCalculated() {
+}
