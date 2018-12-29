@@ -2,8 +2,8 @@
 <Package>
     <DisplayName>Entropy Piano Tuner Algorithms</DisplayName>
     <Description>Install the Entropy Pinano Tuner algorithms. Included is the standard entropy minimizer.</Description>
-    <Version>1.2.0</Version>
-    <ReleaseDate>2017-03-24</ReleaseDate>
+    <Version>1.3.0</Version>
+    <ReleaseDate>2018-12-29</ReleaseDate>
     <Name>org.entropytuner.algorithms</Name>
     <Translations>
     </Translations>

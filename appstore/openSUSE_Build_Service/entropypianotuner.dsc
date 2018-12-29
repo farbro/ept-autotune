@@ -1,6 +1,6 @@
 Format:        1.0
 Source:        entropypianotuner
-Version: 1.2.0
+Version: 1.3.0
 Binary:        entropypianotuner
 Maintainer:    Christoph Wick <info@piano-tuner.org>
 Architecture:  any

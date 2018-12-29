@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright 2016 Haye Hinrichsen, Christoph Wick
+ * Copyright 2018 Haye Hinrichsen, Christoph Wick
  *
  * This file is part of Entropy Piano Tuner.
  *
@@ -22,23 +22,23 @@
 
 // Define the version of the entropy tuner program
 #define EPT_VERSION_MAJOR      1
-#define EPT_VERSION_MINOR      2
+#define EPT_VERSION_MINOR      3
 #define EPT_VERSION_PATCH      0
 
-#define EPT_VERSION_STRING     "1.2.0"
+#define EPT_VERSION_STRING     "1.3.0"
 
 // The rolling version is an integer that increments with each published verion
-#define EPT_VERSION_ROLLING    28
+#define EPT_VERSION_ROLLING    29
 
 
 // define the version of the dependencies
 #define EPT_DEPS_VERSION_MAJOR    1
-#define EPT_DEPS_VERSION_MINOR    2
+#define EPT_DEPS_VERSION_MINOR    3
 #define EPT_DEPS_VERSION_PATCH    0
 
-#define EPT_DEPS_VERSION_STRING   "1.2.0"
+#define EPT_DEPS_VERSION_STRING   "1.3.0"
 
-#define EPT_DEPS_VERSION_ROLLING  4
+#define EPT_DEPS_VERSION_ROLLING  5
 
 
 
