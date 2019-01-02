@@ -67,9 +67,9 @@ win|linux:!android {
         error(QtMidi not found)
     }
 
-    packagesExist(qwt):       EPT_THIRDPARTY_CONFIG+=system_qwt
-    packagesExist(fftw3):     EPT_THIRDPARTY_CONFIG+=system_fftw3
-    packagesExist(libuv):     EPT_THIRDPARTY_CONFIG+=system_libuv
+    packagesExist(qwt):    EPT_THIRDPARTY_CONFIG+=system_qwt
+    packagesExist(fftw3):  EPT_THIRDPARTY_CONFIG+=system_fftw3
+    packagesExist(libuv):  EPT_THIRDPARTY_CONFIG+=system_libuv
 }
 
 include($$PWD/entropypianotuner_static_config.pri)

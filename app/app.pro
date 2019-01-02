@@ -436,7 +436,7 @@ contains(EPT_CONFIG, install) {
     application.path = $$EPT_INSTALL_DATA_DIR/applications
     application.files += $$EPT_APPSTORE_DIR/installer/scripts/entropypianotuner.desktop
 
-    !contains(EPT_THIRDPARTY_CONFIG, system_qwt):!contains(EPT_CONFIG, static_qwt) {
+    !contains(EPT_THIRDPARTY_CONFIG, system_qwt):!contains(EPT_THIRDPARTY_CONFIG, static_qwt) {
         # install target for qwt
         qwtinstall.path = $$EPT_INSTALL_LIB_DIR/entropypianotuner
 
