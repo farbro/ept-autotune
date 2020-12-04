@@ -52,7 +52,7 @@ SignalAnalyzerGroupBox::SignalAnalyzerGroupBox(QWidget *parent) :
     QFont keyLabelFont;
     keyLabelFont.setPointSize(26);
     mKeyLabel->setFont(keyLabelFont);
-    mKeyLabel->setFixedWidth(mKeyLabel->fontMetrics().width("A#0"));
+    mKeyLabel->setFixedWidth(mKeyLabel->fontMetrics().horizontalAdvance("A#0"));
     labelsLayout->addWidget(mKeyLabel);
 
     labelsLayout->addSpacing(2);
@@ -61,7 +61,7 @@ SignalAnalyzerGroupBox::SignalAnalyzerGroupBox(QWidget *parent) :
     labelsLayout->addLayout(frequencyLayout);
 
     mFrequencyLabel = new QLabel("-");
-    mFrequencyLabel->setFixedWidth(mFrequencyLabel->fontMetrics().width("0000.0"));
+    mFrequencyLabel->setFixedWidth(mFrequencyLabel->fontMetrics().horizontalAdvance("0000.0"));
     mFrequencyLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     frequencyLayout->addWidget(mFrequencyLabel);
 
