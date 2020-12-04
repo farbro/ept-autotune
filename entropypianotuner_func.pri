@@ -14,7 +14,7 @@ defineReplace(declareStaticLibrary) {
     }
 
     linux-g++*:!android {
-        QMAKE_CXXFLAGS_DEBUG += -D_GLIBCXX_DEBUG -Wall -Werror -Wpedantic
+        QMAKE_CXXFLAGS_DEBUG += -D_GLIBCXX_DEBUG -Wall -Wpedantic
     }
 
     export(TEMPLATE)
@@ -51,7 +51,7 @@ defineReplace(declareSharedLibrary) {
     }
 
     linux-g++*:!android {
-        QMAKE_CXXFLAGS_DEBUG += -D_GLIBCXX_DEBUG -Wall -Werror -Wpedantic
+        QMAKE_CXXFLAGS_DEBUG += -D_GLIBCXX_DEBUG -Wall -Wpedantic
     }
 
     export(TEMPLATE)

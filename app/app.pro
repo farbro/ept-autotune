@@ -223,7 +223,7 @@ winrt|winphone|win32|win32-g++ {
 # linux libs
 linux-g++*:!android {
     # additional defines in debug modus
-    QMAKE_CXXFLAGS_DEBUG += -D_GLIBCXX_DEBUG -Wall -Werror -Wpedantic
+    QMAKE_CXXFLAGS_DEBUG += -D_GLIBCXX_DEBUG -Wall -Wpedantic
 }
 
 #-------------------------------------------------
