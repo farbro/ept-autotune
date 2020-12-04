@@ -21,7 +21,7 @@
 #define CENTRALPLOTFRAME_H
 
 #include <QTouchEvent>
-#include <QTime>
+#include <QElapsedTimer>
 
 #include <qwt_plot.h>
 #include <qwt_plot_zoomer.h>
@@ -65,7 +65,7 @@ private:
     QwtPlotZoomer *mPlotZoomer;
     QwtPlotZoomer *mNonStackInvisibleZoomer;
 
-    QTime mPlotTimer;
+    QElapsedTimer mPlotTimer;
 
 
     QList<QTouchEvent::TouchPoint> mTouchPoints;

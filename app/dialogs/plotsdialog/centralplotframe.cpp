@@ -162,7 +162,7 @@ void CentralPlotFrame::applyTouchTransform(int final) {
     } else {
         // check timer
         if (mPlotTimer.elapsed() > FLYING_UPDATE_INTERVALL_IN_MS) {
-            mPlotTimer = QTime();  // reset, but dont start
+            mPlotTimer = QElapsedTimer();  // reset, but dont start
             if (newRect.isNull() == false) {
                 mNonStackInvisibleZoomer->zoom(newRect);
                 replot();
