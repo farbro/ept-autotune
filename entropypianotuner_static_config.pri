@@ -58,7 +58,7 @@ contains(EPT_CONFIG, static_deps):EPT_THIRDPARTY_CONFIG += static_qwt
 
 # additional debug flags
 linux-g++*:!android {
-    QMAKE_CXXFLAGS_DEBUG += -D_GLIBCXX_DEBUG
+    QMAKE_CXXFLAGS_DEBUG += -D_GLIBCXX_DEBUG -Wno-deprecated-copy
 }
 
 
