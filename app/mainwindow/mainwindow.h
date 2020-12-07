@@ -41,6 +41,7 @@
 #include "tuningindicatorgroupbox.h"
 #include "versioncheck.h"
 #include "progressdisplay.h"
+#include "tuningdevicegroupbox.h"
 
 class KeyboardGraphicsView;
 
@@ -175,6 +176,9 @@ private:
 
     /// Pointer to the TuningIndicatorGroupBox
     TuningIndicatorGroupBox *mTuningIndicatorGroup = nullptr;
+
+    /// Pointer to the TuningDeviceGroupBox
+    TuningDeviceGroupBox *mTuningDeviceGroup = nullptr;
 
     /// Pointer to the VolumeControlGroupBox
     VolumeControlGroupBox *mVolumeControlGroup = nullptr;

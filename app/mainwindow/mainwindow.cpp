@@ -100,6 +100,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->controlLayout->addWidget(mTuningIndicatorGroup, 1);
     QObject::connect(this, SIGNAL(modeChanged(OperationMode)), mTuningIndicatorGroup, SLOT(onModeChanged(OperationMode)));
 
+    mTuningDeviceGroup = new TuningDeviceGroupBox(this);
+    ui->controlLayout->addWidget(mTuningDeviceGroup, 0);
+    QObject::connect(this, SIGNAL(modeChanged(OperationMode)), mTuningDeviceGroup, SLOT(onModeChanged(OperationMode)));
+
     mKeyboardGraphicsView = new KeyboardGraphicsView(this);
     qobject_cast<QBoxLayout*>(ui->centralWidget->layout())->addWidget(mKeyboardGraphicsView);
 

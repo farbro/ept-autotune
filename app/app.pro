@@ -269,6 +269,7 @@ HEADERS  += \
     mainwindow/mainwindow.h \
     mainwindow/progressdisplay.h \
     mainwindow/signalanalyzergroupbox.h \
+    mainwindow/tuningdevicegroupbox.h \
     mainwindow/tuningindicatorgroupbox.h \
     mainwindow/recordingqualitybar.h \
     mainwindow/recordingstatusgraphicsview.h \
@@ -341,6 +342,7 @@ SOURCES +=  \
     mainwindow/recordingqualitybar.cpp \
     mainwindow/recordingstatusgraphicsview.cpp \
     mainwindow/signalanalyzergroupbox.cpp \
+    mainwindow/tuningdevicegroupbox.cpp \
     mainwindow/tuningindicatorgroupbox.cpp \
     mainwindow/volumecontrolgroupbox.cpp \
     mainwindow/volumecontrollevel.cpp \
