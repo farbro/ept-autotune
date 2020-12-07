@@ -94,6 +94,17 @@ void PianoFileIOXml::write(QIODevice *device, const Piano &piano) const {
             writer.writeEndElement();  // peak
         }
 
+        // tuning device records
+        writer.writeStartElement("tuningDeviceRecords");
+        for (auto record : key.getTuningDeviceRecords()) {
+            writer.writeStartElement("tuningDeviceRecord");
+            writer.writeAttribute("setValue", record.setValue);
+            writer.writeAttribute("initialFrequency", record.initialFrequency);
+            writer.writeAttribute("frequencyChange", record.frequencyChange);
+            writer.writeEndElement();
+        }
+        writer.writeEndElement();
+
         writer.writeEndElement();  // key
     }
 
