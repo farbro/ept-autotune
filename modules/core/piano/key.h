@@ -30,6 +30,12 @@ class Key;
 
 template class EPT_EXTERN std::shared_ptr<Key>;
 
+struct TuningDeviceResults {
+    double setValue;
+    double initialFrequency;
+    double frequencyChange;
+};
+
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Class describing a single piano key
 ///
@@ -56,6 +62,8 @@ public:
 
     using SpectrumType = std::vector<double>;       ///< Type of a log-binned spectrum
     using PeakListType = std::map<double,double>;   ///< Type for a peak map
+
+    using TuningDeviceRecordsType = std::vector<TuningDeviceResults>; ///< Type for tuning device measurement data
 
     // Conversion function in the context of the logarithmically binned spectrum
 
@@ -105,6 +113,9 @@ public:
     bool    isRecorded() const {return mRecorded;}  ///< Get recorded flag
     bool   &isRecorded() {return mRecorded;}        ///< Get recorded flag
 
+    void    addTuningDeviceRecord(double setValue, double initialFrequency, double frequencyChange); ///< Add tuning device record
+    const TuningDeviceRecordsType &getTuningDeviceRecords() const; ///< Get tuning device records
+
 private:
     SpectrumType mSpectrum;             ///< Logarithmically organized spectrum
     PeakListType mPeaks;                ///< List of identified peaks
@@ -115,6 +126,10 @@ private:
     double mTunedFrequency;             ///< Tuned frequency in Hz
     double mOverpull;                   ///< Overpull in cents
     bool   mRecorded;                   ///< Is the key already recorded?
+
+    // Flywheel tuner measurement dat
+    TuningDeviceRecordsType mTuningDeviceRecords; ///< List of recorded pitch changes for tuning data.
+
 };
 
 #endif // KEY_H

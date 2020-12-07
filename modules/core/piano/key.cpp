@@ -51,6 +51,7 @@ void Key::clear()
     mTunedFrequency = 0;
     mOverpull = 0;
     mRecorded = false;
+    mTuningDeviceRecords.clear();
 }
 
 
@@ -267,3 +268,17 @@ Key::PeakListType &Key::getPeaks ()
 
 const Key::PeakListType & Key::getPeaks () const
 { return mPeaks; }
+
+
+//-----------------------------------------------------------------------------
+//                            add tuning device record
+//-----------------------------------------------------------------------------
+void Key::addTuningDeviceRecord(double setValue, double initialFrequency, double frequencyChange) {
+
+    TuningDeviceResults record = {setValue, initialFrequency, frequencyChange};
+    mTuningDeviceRecords.push_back(record);
+}
+
+const Key::TuningDeviceRecordsType &Key::getTuningDeviceRecords() const {
+    return mTuningDeviceRecords;
+}
