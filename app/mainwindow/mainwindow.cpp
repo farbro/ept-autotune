@@ -100,7 +100,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->controlLayout->addWidget(mTuningIndicatorGroup, 1);
     QObject::connect(this, SIGNAL(modeChanged(OperationMode)), mTuningIndicatorGroup, SLOT(onModeChanged(OperationMode)));
 
-    mTuningDeviceGroup = new TuningDeviceGroupBox(this);
+    mTuningDeviceGroup = new TuningDeviceGroupBox(mCore, this);
     ui->controlLayout->addWidget(mTuningDeviceGroup, 0);
     QObject::connect(this, SIGNAL(modeChanged(OperationMode)), mTuningDeviceGroup, SLOT(onModeChanged(OperationMode)));
 

@@ -7,12 +7,18 @@
 #include <QCheckBox>
 #include "prerequisites.h"
 #include "widgets/displaysizedependinggroupbox.h"
+#include "core/messages/messagelistener.h"
+#include "core.h"
+#include "core/tuningdevice/tuningdevicecontroller.h"
 
-class TuningDeviceGroupBox : public DisplaySizeDependingGroupBox
+class TuningDeviceGroupBox : public DisplaySizeDependingGroupBox,
+                             public MessageListener,
+                             public TuningDeviceController
 {
     Q_OBJECT
+
 public:
-    TuningDeviceGroupBox(QWidget *parent);
+    TuningDeviceGroupBox(Core *core, QWidget *parent);
 
     void setSuggestedValue(double value) {mSuggestedValue->setValue(value);}
 
@@ -21,10 +27,18 @@ private:
     QPushButton *mRunTuningCycle;
     QCheckBox *mAutomaticTuning;
     QLabel *mState;
+    bool mRunning = false;
+    const Key *mKey = nullptr;
 
-signals:
-    void runClicked();
-    void autoTuningToggled(bool);
+    ///////////////////////////////////////////////////////////////////////////////
+    /// \brief Message handling.
+    /// \param m : The message.
+    ///
+    ///////////////////////////////////////////////////////////////////////////////
+    virtual void handleMessage(MessagePtr m) override final;
+
+    void startAutoTuning();
+    void stopAutoTuning();
 
 public slots:
     void setState(int state);

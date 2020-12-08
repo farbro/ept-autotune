@@ -247,6 +247,13 @@ CORE_CALCULATION_SOURCES = \
     calculation/algorithmparameters.cpp \
     calculation/algorithminformationparser.cpp \
 
+#--------------- Tuning Device -----------------
+CORE_TUNING_DEVICE_HEADERS = \
+    tuningdevice/tuningdevicecontroller.h
+
+CORE_TUNING_DEVICE_SOURCES = \
+    tuningdevice/tuningdevicecontroller.cpp
+
 #----------------- Core --------------------
 
 CORE_HEADERS = \
@@ -282,6 +289,7 @@ HEADERS += \
     $$CORE_CALCULATION_HEADERS \
     $$CORE_SYSTEM_HEADERS \
     $$CORE_3RDPARTY_HEADERS \
+    $$CORE_TUNING_DEVICE_HEADERS \
 
 SOURCES += \
     $$CORE_SOURCES \
@@ -296,6 +304,7 @@ SOURCES += \
     $$CORE_CALCULATION_SOURCES \
     $$CORE_SYSTEM_SOURCES \
     $$CORE_3RDPARTY_SOURCES \
+    $$CORE_TUNING_DEVICE_SOURCES \
 
 # installation of shared lib
 contains(EPT_CONFIG, install) {

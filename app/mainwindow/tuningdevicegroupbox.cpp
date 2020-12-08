@@ -4,9 +4,13 @@
 #include <QFormLayout>
 #include <QLabel>
 #include <QCheckBox>
+#include "../core/messages/messagefinalkey.h"
+#include "../core/messages/messagekeyselectionchanged.h"
 
-TuningDeviceGroupBox::TuningDeviceGroupBox(QWidget *parent) :
-    DisplaySizeDependingGroupBox(parent, new QHBoxLayout, toFlag(MODE_TUNING))
+TuningDeviceGroupBox::TuningDeviceGroupBox(Core *core, QWidget *parent) :
+    DisplaySizeDependingGroupBox(parent, new QHBoxLayout, toFlag(MODE_TUNING)),
+    MessageListener(),
+    TuningDeviceController(core)
 {
     setTitle(tr("Tuning device"));
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -51,6 +55,7 @@ TuningDeviceGroupBox::TuningDeviceGroupBox(QWidget *parent) :
     mRunTuningCycle = new QPushButton;
     vboxLayout->addWidget(mRunTuningCycle);
     mRunTuningCycle->setText(tr("Run"));
+    mRunTuningCycle->setDisabled(true);
     QObject::connect(mRunTuningCycle, SIGNAL(clicked(bool)), this, SLOT(onRunClicked()));
 
 
@@ -67,13 +72,24 @@ TuningDeviceGroupBox::TuningDeviceGroupBox(QWidget *parent) :
 }
 
 void TuningDeviceGroupBox::onAutoTuningToggled(bool b) {
-    emit autoTuningToggled(b);
-
     mSuggestedValue->setDisabled(b);
 }
 
 void TuningDeviceGroupBox::onRunClicked() {
-    emit runClicked();
+    mRunning = !mRunning;
+
+
+    if (mRunning) {
+        startAutoTuning();
+
+        mRunTuningCycle->setText(tr("Stop"));
+        mRunTuningCycle->setStyleSheet("background-color: crimson");
+    } else {
+        stopAutoTuning();
+
+        mRunTuningCycle->setText(tr("Run"));
+        mRunTuningCycle->setStyleSheet("");
+    }
 }
 
 void TuningDeviceGroupBox::setState(int state) {
@@ -83,4 +99,38 @@ void TuningDeviceGroupBox::setState(int state) {
         case 2: mState->setText(tr("Performing tuning")); break;
         case 3: mState->setText(tr("Awaiting result tone")); break;
     }
+}
+//-----------------------------------------------------------------------------
+//                             Message handler
+//-----------------------------------------------------------------------------
+
+void TuningDeviceGroupBox::handleMessage(MessagePtr m) {
+    switch (m->getType())
+    {
+    /*case Message::MSG_FINAL_KEY:
+    {
+        auto message(std::static_pointer_cast<MessageFinalKey>(m));
+        mKey = message->getFinalKey();
+
+        break;
+    }*/
+    case Message::MSG_KEY_SELECTION_CHANGED: {
+        auto message(std::static_pointer_cast<MessageKeySelectionChanged>(m));
+        mKey = message->getKey();
+
+        if (mKey) {
+            mRunTuningCycle->setDisabled(false);
+        }
+    }
+    default:
+        break;
+    }
+}
+
+void TuningDeviceGroupBox::startAutoTuning() {
+    TuningDeviceController::startTuning(*mKey);
+}
+
+void TuningDeviceGroupBox::stopAutoTuning() {
+    TuningDeviceController::stopTuning();
 }
