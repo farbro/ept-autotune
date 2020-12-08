@@ -1,7 +1,7 @@
 # Entropy Piano Tuner - Flywheel Tuner Mod
 
 ## Information about this fork
-This fork of Entropy Piano Tuner has experimental support for the [automatic flywheel tuner device][https://neek.se/pianotuner]. The goal is to integrate and control the tuning device in order to automatically tune the piano's tuning pins to the frequency that has been calculated by Entropy Piano Tuner.
+This fork of Entropy Piano Tuner has experimental support for the [automatic flywheel tuner device](https://neek.se/pianotuner). The goal is to integrate and control the tuning device in order to automatically tune the piano's tuning pins to the frequency that has been calculated by Entropy Piano Tuner.
 
 ## Information
 
