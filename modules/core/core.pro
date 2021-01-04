@@ -34,6 +34,8 @@ $$depends_libuv()
 $$depends_timesupport()
 $$depends_tp3log()
 
+LIBS += -L$$EPT_ROOT_OUT_DIR/thirdparty/qtcurl/lib -lqtcurl -lcurl
+
 # debugging flags: all warnings and check arrays, etc
 linux-g++*:!android {
     QMAKE_CXXFLAGS_DEBUG += -D_GLIBCXX_DEBUG -Wall -Wpedantic

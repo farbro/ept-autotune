@@ -99,6 +99,8 @@ $$depends_libuv()
 $$depends_qwt()
 $$depends_timesupport()
 
+LIBS += -L$$EPT_ROOT_OUT_DIR/thirdparty/qtcurl/lib -lqtcurl -lcurl
+
 #-------------------------------------------------
 #                      Apple
 #-------------------------------------------------
