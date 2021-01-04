@@ -20,27 +20,93 @@
 
 #include "tuningdevicecontroller.h"
 #include "../core.h"
+#include "../core/messages/messagekeyselectionchanged.h"
+#include "../core/messages/messagefinalkey.h"
+#include <sstream>
 
 TuningDeviceController::TuningDeviceController(Core *core) : mCore(core) {
 }
 
-void TuningDeviceController::startTuning(const Key &key) {
-    Piano  &piano = mCore->getPianoManager()->getPiano();
-    LogI("Start tuning key to %f Hz", key.getComputedFrequency());
-    //piano.getKeyboard().getKeyNumberOfA4()
+TuningDeviceController::~TuningDeviceController() {}
+
+void TuningDeviceController::start() {
+    mEnabled = true;
+    LogI("Tuning enabled");
 }
 
-void TuningDeviceController::stopTuning() {
-    LogI("Stopping tuning");
+void TuningDeviceController::stop() {
+    mEnabled = false;
+    LogI("Tuning disabled");
 }
 
-void TuningDeviceController::runTuningCycle(Key key, double setValue, bool automatic) {
+void TuningDeviceController::performImpact() {
+    double currentAngle = freq2angle(mKey->getTunedFrequency());
+    double targetAngle = freq2angle(mKey->getComputedFrequency());
 
+    double error = currentAngle - targetAngle;
+
+    // Check if already in target
+    if (error < minErrorCents) {
+        return;
+    }
+
+    // Check if too close
+    if (calculateRequiredImpactVelocity(currentAngle, targetAngle) < getMinImpact()) {
+        targetAngle = currentAngle + getMinImpact();
+    }
+
+    double velocity = calculateRequiredImpactVelocity(currentAngle, targetAngle);
+
+    sendEngageCommand(velocity);
 }
-void TuningDeviceController::performImpact(double value) {
 
+void TuningDeviceController::updateState(STATES state) {
+    LogE("Update state not working...");
 }
 
-TuningDeviceController::STATES TuningDeviceController::getState() {
-    return state;
+bool TuningDeviceController::sendEngageCommand(double velocity) {
+    mImpactInProggress = true;
+    updateState(TuningDeviceController::PERFORM_IMPACT);
+
+    // Engange device through HTTP POST
+    CurlEasy *curl = new CurlEasy;
+
+    curl->set(CURLOPT_URL, DEVICE_ENGAGE_URL);
+    curl->set(CURLOPT_TIMEOUT, 5L);
+
+    // Set POST fields
+    std::ostringstream data_ss;
+    data_ss << "motor_speed=" << velocity;
+
+    curl->set(CURLOPT_POSTFIELDS, data_ss.str().c_str());
+
+
+
+    return true;
+}
+
+double TuningDeviceController::freq2angle(double frequency) {
+    // TODO implement freq2angle mapping
+
+    return 1;
+}
+
+double TuningDeviceController::calculateRequiredImpactVelocity(double currentAngle, double targetAngle) {
+    // TODO implement mapping
+
+    return 20;
+}
+
+double TuningDeviceController::getMinImpact() {
+    return 10;
+}
+
+
+void TuningDeviceController::impactFinished() {
+    mImpactInProggress = false;
+    updateState(TuningDeviceController::AWAIT_KEYPRESS);
+}
+
+void TuningDeviceController::keyRecorded() {
+    performImpact();
 }

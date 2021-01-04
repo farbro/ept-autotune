@@ -92,12 +92,11 @@ void TuningDeviceGroupBox::onRunClicked() {
     }
 }
 
-void TuningDeviceGroupBox::setState(int state) {
+void TuningDeviceGroupBox::updateState(TuningDeviceController::STATES state) {
     switch (state) {
-        case 0: mState->setText(tr("Idle")); break;
-        case 1: mState->setText(tr("Awaiting tone")); break;
-        case 2: mState->setText(tr("Performing tuning")); break;
-        case 3: mState->setText(tr("Awaiting result tone")); break;
+        case TuningDeviceController::DISABLED: mState->setText(tr("Disabled")); break;
+        case TuningDeviceController::AWAIT_KEYPRESS: mState->setText(tr("Await keypress")); break;
+        case TuningDeviceController::PERFORM_IMPACT: mState->setText(tr("Performing tuning")); break;
     }
 }
 //-----------------------------------------------------------------------------
@@ -107,30 +106,33 @@ void TuningDeviceGroupBox::setState(int state) {
 void TuningDeviceGroupBox::handleMessage(MessagePtr m) {
     switch (m->getType())
     {
-    /*case Message::MSG_FINAL_KEY:
+    case Message::MSG_FINAL_KEY: // Key has been recorded
     {
         auto message(std::static_pointer_cast<MessageFinalKey>(m));
-        mKey = message->getFinalKey();
+        auto keyptr = message->getFinalKey();
+        mKey = keyptr.get();
+
+        keyRecorded();
 
         break;
-    }*/
-    case Message::MSG_KEY_SELECTION_CHANGED: {
+    }
+    /*case Message::MSG_KEY_SELECTION_CHANGED: {
         auto message(std::static_pointer_cast<MessageKeySelectionChanged>(m));
         mKey = message->getKey();
 
         if (mKey) {
             mRunTuningCycle->setDisabled(false);
         }
-    }
+    }*/
     default:
         break;
     }
 }
 
 void TuningDeviceGroupBox::startAutoTuning() {
-    TuningDeviceController::startTuning(*mKey);
+    start();
 }
 
 void TuningDeviceGroupBox::stopAutoTuning() {
-    TuningDeviceController::stopTuning();
+    stop();
 }

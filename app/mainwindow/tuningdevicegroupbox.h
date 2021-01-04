@@ -21,6 +21,7 @@ public:
     TuningDeviceGroupBox(Core *core, QWidget *parent);
 
     void setSuggestedValue(double value) {mSuggestedValue->setValue(value);}
+    void updateState(TuningDeviceController::STATES state) override;
 
 private:
     QSpinBox *mSuggestedValue;
@@ -39,9 +40,6 @@ private:
 
     void startAutoTuning();
     void stopAutoTuning();
-
-public slots:
-    void setState(int state);
 
 private slots:
     void onRunClicked();

@@ -21,41 +21,51 @@
 #define TUNINGDEVICECONTROLLER_H
 
 #include "../piano/key.h"
+#include "../system/simplethreadhandler.h"
+#include "core/messages/messagelistener.h"
+#include "../../thirdparty/qtcurl/src/CurlEasy.h"
+
+#define DEVICE_ENGAGE_URL "http://pianotuner.mnm.granet/run"
 
 class Core;
+class CurlEasy;
 
-class TuningDeviceController
+class EPT_EXTERN TuningDeviceController
 {
-
 public:
 
     enum STATES {
-        IDLE,
-        AWAIT_PRE_TONE,
-        TUNE,
-        AWAIT_POST_TONE
+        DISABLED,
+        AWAIT_KEYPRESS,
+        PERFORM_IMPACT,
     };
 
     TuningDeviceController(Core *core);
-    virtual ~TuningDeviceController() {}
+    virtual ~TuningDeviceController();
 
-    void startTuning(const Key &key);
-    void stopTuning();
+    void start();
+    void stop();
 
-    void runTuningCycle(Key key, double setValue, bool automatic);
-    void performImpact(double value);
-    STATES getState();
+    void keyRecorded();
+
+    virtual void updateState(STATES state);
+
 
 private:
     Core *mCore;
 
-    STATES state;
+    bool mEnabled = false;
+    bool mImpactInProggress = false;
+    STATES mState = DISABLED;
     double minErrorCents = 10;
-    Key key;
-
-    double nextSetValue(Key key);
-    double error(Key key);
-    void tune();
+    std::shared_ptr<Key> mKey;
+    double calculateError();
+    double freq2angle(double frequency);
+    void performImpact();
+    double calculateRequiredImpactVelocity(double currentAngle, double targetAngle);
+    double getMinImpact();
+    void impactFinished();
+    bool sendEngageCommand(double velocity);
 };
 
 #endif // TUNINGDEVICECONTROLLER_H

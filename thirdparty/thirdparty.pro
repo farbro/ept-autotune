@@ -28,3 +28,5 @@ winrtbridge {
 }
 
 SUBDIRS += tp3log
+
+SUBDIRS += qtcurl
