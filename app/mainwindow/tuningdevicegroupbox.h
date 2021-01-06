@@ -12,8 +12,7 @@
 #include "core/tuningdevice/tuningdevicecontroller.h"
 
 class TuningDeviceGroupBox : public DisplaySizeDependingGroupBox,
-                             public MessageListener,
-                             public TuningDeviceController
+                             public MessageListener
 {
     Q_OBJECT
 
@@ -21,9 +20,9 @@ public:
     TuningDeviceGroupBox(Core *core, QWidget *parent);
 
     void setSuggestedValue(double value) {mSuggestedValue->setValue(value);}
-    void updateState(TuningDeviceController::STATES state) override;
 
 private:
+    TuningDeviceController mController;
     QSpinBox *mSuggestedValue;
     QPushButton *mRunTuningCycle;
     QCheckBox *mAutomaticTuning;
@@ -44,6 +43,7 @@ private:
 private slots:
     void onRunClicked();
     void onAutoTuningToggled(bool);
+    void onStateChanged(TuningDeviceController::STATES state);
 };
 
 #endif // TUNINGDEVICEGROUPBOX_H

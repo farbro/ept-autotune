@@ -10,7 +10,7 @@
 TuningDeviceGroupBox::TuningDeviceGroupBox(Core *core, QWidget *parent) :
     DisplaySizeDependingGroupBox(parent, new QHBoxLayout, toFlag(MODE_TUNING)),
     MessageListener(),
-    TuningDeviceController(core)
+    mController(core)
 {
     setTitle(tr("Tuning device"));
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -65,10 +65,11 @@ TuningDeviceGroupBox::TuningDeviceGroupBox(Core *core, QWidget *parent) :
     QLabel *stateLabel = new QLabel(tr("State:"));
     stateLayout->addWidget(stateLabel);
 
-    mState = new QLabel("Idle");
+    mState = new QLabel("Disabled");
     stateLayout->addWidget(mState);
     mState->setAlignment(Qt::AlignLeft);
 
+    QObject::connect(&mController, &TuningDeviceController::updateState, this, &TuningDeviceGroupBox::onStateChanged);
 }
 
 void TuningDeviceGroupBox::onAutoTuningToggled(bool b) {
@@ -92,7 +93,7 @@ void TuningDeviceGroupBox::onRunClicked() {
     }
 }
 
-void TuningDeviceGroupBox::updateState(TuningDeviceController::STATES state) {
+void TuningDeviceGroupBox::onStateChanged(TuningDeviceController::STATES state) {
     switch (state) {
         case TuningDeviceController::DISABLED: mState->setText(tr("Disabled")); break;
         case TuningDeviceController::AWAIT_KEYPRESS: mState->setText(tr("Await keypress")); break;
@@ -112,27 +113,29 @@ void TuningDeviceGroupBox::handleMessage(MessagePtr m) {
         auto keyptr = message->getFinalKey();
         mKey = keyptr.get();
 
-        keyRecorded();
+        mController.setKey(mKey);
 
         break;
     }
-    /*case Message::MSG_KEY_SELECTION_CHANGED: {
+    case Message::MSG_KEY_SELECTION_CHANGED: {
         auto message(std::static_pointer_cast<MessageKeySelectionChanged>(m));
         mKey = message->getKey();
 
         if (mKey) {
             mRunTuningCycle->setDisabled(false);
+            mController.setKey(mKey);
+            mController.tune();
         }
-    }*/
+    }
     default:
         break;
     }
 }
 
 void TuningDeviceGroupBox::startAutoTuning() {
-    start();
+    mController.start();
 }
 
 void TuningDeviceGroupBox::stopAutoTuning() {
-    stop();
+    mController.stop();
 }

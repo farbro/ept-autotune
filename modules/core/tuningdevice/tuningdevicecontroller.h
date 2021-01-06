@@ -22,16 +22,17 @@
 
 #include "../piano/key.h"
 #include "../system/simplethreadhandler.h"
-#include "core/messages/messagelistener.h"
-#include "../../thirdparty/qtcurl/src/CurlEasy.h"
+#include "../../core/messages/messagelistener.h"
+#include "../../../thirdparty/qtcurl/src/CurlEasy.h"
 
 #define DEVICE_ENGAGE_URL "http://pianotuner.mnm.granet/run"
 
 class Core;
 class CurlEasy;
 
-class EPT_EXTERN TuningDeviceController
+class TuningDeviceController : public QObject
 {
+    Q_OBJECT
 public:
 
     enum STATES {
@@ -45,27 +46,37 @@ public:
 
     void start();
     void stop();
+    void setKey(const Key *mKey);
 
-    void keyRecorded();
+    void tune();
 
-    virtual void updateState(STATES state);
+signals:
+    void updateState(STATES state);
 
 
 private:
     Core *mCore;
+    CurlEasy *curl = nullptr;
+    QString mParams;
+    const Key *mKey;
+    double mCurrentImpactVelocity = 0;
+    double mLastImpactVelocity = 0;
 
     bool mEnabled = false;
     bool mImpactInProggress = false;
     STATES mState = DISABLED;
     double minErrorCents = 10;
-    std::shared_ptr<Key> mKey;
     double calculateError();
-    double freq2angle(double frequency);
+    double freq2angle(double frequency, int lastTuningDirection);
     void performImpact();
     double calculateRequiredImpactVelocity(double currentAngle, double targetAngle);
     double getMinImpact();
-    void impactFinished();
     bool sendEngageCommand(double velocity);
+    double deviationInCents();
+
+private slots:
+    void impactFinished();
+
 };
 
 #endif // TUNINGDEVICECONTROLLER_H
