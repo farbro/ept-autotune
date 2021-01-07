@@ -54,7 +54,7 @@ TuningDeviceGroupBox::TuningDeviceGroupBox(Core *core, QWidget *parent) :
 
     mRunTuningCycle = new QPushButton;
     vboxLayout->addWidget(mRunTuningCycle);
-    mRunTuningCycle->setText(tr("Run"));
+    mRunTuningCycle->setText(tr("Tune"));
     mRunTuningCycle->setDisabled(true);
     QObject::connect(mRunTuningCycle, SIGNAL(clicked(bool)), this, SLOT(onRunClicked()));
 
@@ -77,20 +77,7 @@ void TuningDeviceGroupBox::onAutoTuningToggled(bool b) {
 }
 
 void TuningDeviceGroupBox::onRunClicked() {
-    mRunning = !mRunning;
-
-
-    if (mRunning) {
-        startAutoTuning();
-
-        mRunTuningCycle->setText(tr("Stop"));
-        mRunTuningCycle->setStyleSheet("background-color: crimson");
-    } else {
-        stopAutoTuning();
-
-        mRunTuningCycle->setText(tr("Run"));
-        mRunTuningCycle->setStyleSheet("");
-    }
+    startAutoTuning();
 }
 
 void TuningDeviceGroupBox::onStateChanged(TuningDeviceController::STATES state) {
@@ -98,6 +85,8 @@ void TuningDeviceGroupBox::onStateChanged(TuningDeviceController::STATES state) 
         case TuningDeviceController::DISABLED: mState->setText(tr("Disabled")); break;
         case TuningDeviceController::AWAIT_KEYPRESS: mState->setText(tr("Await keypress")); break;
         case TuningDeviceController::PERFORM_IMPACT: mState->setText(tr("Performing tuning")); break;
+        case TuningDeviceController::IN_TARGET: mState->setText(tr("In target, tuning finished."));
+        break;
     }
 }
 //-----------------------------------------------------------------------------
@@ -113,7 +102,15 @@ void TuningDeviceGroupBox::handleMessage(MessagePtr m) {
         auto keyptr = message->getFinalKey();
         mKey = keyptr.get();
 
-        mController.setKey(mKey);
+        mController.setCurrentFreq(mKey->getTunedFrequency());
+
+        if (mKey) {
+            mRunTuningCycle->setDisabled(false);
+
+            if (mAutomaticTuning->isChecked()) {
+                mController.tune();
+            }
+        }
 
         break;
     }
@@ -121,11 +118,9 @@ void TuningDeviceGroupBox::handleMessage(MessagePtr m) {
         auto message(std::static_pointer_cast<MessageKeySelectionChanged>(m));
         mKey = message->getKey();
 
-        if (mKey) {
-            mRunTuningCycle->setDisabled(false);
-            mController.setKey(mKey);
-            mController.tune();
-        }
+        if (mKey && mKey->isRecorded())
+            mController.setTargetFreq(mKey->getComputedFrequency());
+
     }
     default:
         break;
@@ -134,6 +129,7 @@ void TuningDeviceGroupBox::handleMessage(MessagePtr m) {
 
 void TuningDeviceGroupBox::startAutoTuning() {
     mController.start();
+    mController.tune();
 }
 
 void TuningDeviceGroupBox::stopAutoTuning() {

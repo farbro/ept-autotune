@@ -27,7 +27,6 @@ private:
     QPushButton *mRunTuningCycle;
     QCheckBox *mAutomaticTuning;
     QLabel *mState;
-    bool mRunning = false;
     const Key *mKey = nullptr;
 
     ///////////////////////////////////////////////////////////////////////////////

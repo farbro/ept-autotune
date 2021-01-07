@@ -54,26 +54,52 @@ void TuningDeviceController::performImpact() {
     int lastImpactDirection = 0;
     if (mLastImpactVelocity > 0) lastImpactDirection = 1;
     else if (mLastImpactVelocity < 0) lastImpactDirection = -1;
-    double currentAngle = freq2angle(mKey->getTunedFrequency(), lastImpactDirection);
-    double targetAngle = freq2angle(mKey->getComputedFrequency(), lastImpactDirection);
+    LogI("Last impact direction: %d", lastImpactDirection);
 
-    double error = deviationInCents();
-    LogI("Deviation = %f cents", error);
+    double target_hz = mTargetFrequency;
+    double current_hz = mCurrentFrequency;
+    double error_hz = current_hz - target_hz;
+    LogI("Target: %f Hz, current: %f Hz", target_hz, current_hz);
+    LogI("Error in Hz: %f", error_hz);
+
+    double current_rad = freq2angle(current_hz, lastImpactDirection);
+    double target_rad = freq2angle(target_hz, lastImpactDirection);
+    double error_rad = current_rad - target_rad;
+    LogI("Error in radians: %f", error_rad);
+
+    double error_cents = deviationInCents(target_hz, current_hz);
+    LogI("Error in cents: %f", error_cents);
 
     // Check if already in target
-    if (error < minErrorCents) {
+    if (fabs(error_cents) < maxDeviationCents) {
+        emit updateState(TuningDeviceController::IN_TARGET);
         LogI("Already in target. Tuning finished.");
         return;
     }
 
-    // Check if too close
-    if (calculateRequiredImpactVelocity(currentAngle, targetAngle) < getMinImpact()) {
-        targetAngle = currentAngle + getMinImpact();
+    double minImpact;
+    if (error_rad < 0) {
+        minImpact = calculateRequiredImpactVelocity(current_rad, current_rad + 0.001);
+    } else {
+        minImpact = calculateRequiredImpactVelocity(current_rad, current_rad - 0.001);
     }
 
-    double velocity = calculateRequiredImpactVelocity(currentAngle, targetAngle);
+    LogI("Min velocity: %f", minImpact);
 
-    sendEngageCommand(velocity);
+    double requiredImpactVelocity = calculateRequiredImpactVelocity(current_rad, target_rad);
+    LogI("Required velocity: %f", requiredImpactVelocity);
+
+    // Check if too close
+    if (fabs(requiredImpactVelocity) <= fabs(minImpact)) {
+        target_rad = current_rad + 0.001;
+
+        LogI("Target is too close. New target is %f", target_rad);
+    }
+
+    requiredImpactVelocity = calculateRequiredImpactVelocity(current_rad, target_rad);
+    LogI("Required velocity from angle %f to %f: %f", current_rad, target_rad, requiredImpactVelocity);
+
+    sendEngageCommand(requiredImpactVelocity);
 }
 
 bool TuningDeviceController::sendEngageCommand(double velocity) {
@@ -100,7 +126,6 @@ bool TuningDeviceController::sendEngageCommand(double velocity) {
 }
 
 double TuningDeviceController::freq2angle(double frequency, int lastTuningDirection = 0) {
-    // TODO implement freq2angle mapping
 
     // FOR STRING G4.1
     double angle_cw = (frequency - 334.90)/262.255;
@@ -121,17 +146,28 @@ double TuningDeviceController::freq2angle(double frequency, int lastTuningDirect
 }
 
 double TuningDeviceController::calculateRequiredImpactVelocity(double currentAngle, double targetAngle) {
-    // TODO implement mapping
-    double vel;
 
-    vel = 20;
+    // for string G4.1
+    double angle_diff = targetAngle - currentAngle;
 
-    LogI("Required velocity from angle %f to %f: %f", currentAngle, targetAngle, vel);
+    if (angle_diff > 0.08) angle_diff = 0.08;
+    if (angle_diff < -0.14)  angle_diff = -0.14;
+
+    double vel = 0;
+
+    if (angle_diff > 0) {
+        vel = -4555.47*pow(angle_diff, 2) + 855.10*angle_diff + 20.598;
+
+        if (vel > 60) vel = 60;
+        if (vel < 45) vel = 45;
+    } else if (angle_diff < 0) {
+        vel = 755.53*pow(angle_diff, 2) + 380.34*angle_diff - 17.03;
+
+        if (vel > -25) vel = -25;
+        if (vel < -55) vel = -55;
+    }
+
     return vel;
-}
-
-double TuningDeviceController::getMinImpact() {
-    return 0;
 }
 
 
@@ -142,25 +178,29 @@ void TuningDeviceController::impactFinished() {
     } else {
         LogI("HTTP POST succeeded.");
         mLastImpactVelocity = mCurrentImpactVelocity;
+
+        mImpactInProggress = false;
+        emit updateState(TuningDeviceController::AWAIT_KEYPRESS);
     }
 
-    mImpactInProggress = false;
-    emit updateState(TuningDeviceController::AWAIT_KEYPRESS);
 }
 
 void TuningDeviceController::tune() {
     performImpact();
 }
 
-void TuningDeviceController::setKey(const Key *key) {
-    mKey = key;
+void TuningDeviceController::setTargetFreq(double target) {
+    LogI("Setting target frequency to %f Hz", target);
+    mTargetFrequency = target;
 }
 
-double TuningDeviceController::deviationInCents() {
-    double freq1 = mKey->getComputedFrequency();
-    double freq2 = mKey->getTunedFrequency();
+void TuningDeviceController::setCurrentFreq(double current) {
+    LogI("Setting current frequency to %f Hz", current);
+    mCurrentFrequency = current;
+}
 
-    double cents = 1200*log(freq2/freq1);
+double TuningDeviceController::deviationInCents(double target, double current) {
+    double cents = 1200*log(current/target);
 
     return cents;
 }

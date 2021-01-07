@@ -39,6 +39,7 @@ public:
         DISABLED,
         AWAIT_KEYPRESS,
         PERFORM_IMPACT,
+        IN_TARGET
     };
 
     TuningDeviceController(Core *core);
@@ -46,7 +47,8 @@ public:
 
     void start();
     void stop();
-    void setKey(const Key *mKey);
+    void setTargetFreq(double target);
+    void setCurrentFreq(double current);
 
     void tune();
 
@@ -58,21 +60,23 @@ private:
     Core *mCore;
     CurlEasy *curl = nullptr;
     QString mParams;
-    const Key *mKey;
     double mCurrentImpactVelocity = 0;
     double mLastImpactVelocity = 0;
+
+    double mTargetFrequency;
+    double mCurrentFrequency;
 
     bool mEnabled = false;
     bool mImpactInProggress = false;
     STATES mState = DISABLED;
-    double minErrorCents = 10;
+    double maxDeviationCents = 3;
     double calculateError();
     double freq2angle(double frequency, int lastTuningDirection);
     void performImpact();
     double calculateRequiredImpactVelocity(double currentAngle, double targetAngle);
     double getMinImpact();
     bool sendEngageCommand(double velocity);
-    double deviationInCents();
+    double deviationInCents(double target, double current);
 
 private slots:
     void impactFinished();
